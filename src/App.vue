@@ -1,9 +1,8 @@
 <template>
   <div id="app">
     <Slideout :touch="false" :toggleSelectors="['.toggle-button', '.another-toggle', '.not-a-toggle']" @on-open="logger">
-      <Hello/>
+      <HelloWorld msg="Welcome to Your Vue.js App"/>
     </Slideout>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
@@ -18,11 +17,11 @@ export default {
     Slideout
   },
   mounted: function() {
-    console.log(this.$children[0].slideout.isOpen());
+    
   },
   methods: {
     logger: function() {
-      console.log("open event");
+      
     }
   }
 }

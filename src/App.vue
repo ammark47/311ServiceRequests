@@ -19,7 +19,7 @@ export default {
   name: 'app',
   components: {
     HelloWorld,
-    Slideout
+    Slideout,
   },
   mounted: function() {
     console.log(this.$children[0].slideout.isOpen());
@@ -53,7 +53,6 @@ body {
   bottom: 0;
   width: 256px;
   height: 100vh;
-  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   z-index: 0;
   display: none;

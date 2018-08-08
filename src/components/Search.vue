@@ -9,6 +9,7 @@
             country="sg"
         >
         </vue-google-autocomplete>
+
   </div>
 </template>
 
@@ -50,5 +51,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+input#map {
+    padding: 5px;
+    width: 200px;
+    height: 35px;
+    border: 1px solid black;
+}
 
 </style>

@@ -1,7 +1,11 @@
 <template>
-  <div class="hello">
+  <div class="helloworld">
     <nav id="menu">
+
       <div class="logo">Menu</div>
+      <div>Menu</div>
+      <Search />
+
     </nav>
 
     <main id="panel">
@@ -19,8 +23,11 @@
 </template>
 
 <script>
+import Search from './Search'
+
 export default {
-  name: 'hello',
+  name: 'helloworld',
+  components: { Search },
   props: {
     msg: String
   }

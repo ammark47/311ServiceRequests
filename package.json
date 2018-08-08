@@ -10,6 +10,7 @@
   "dependencies": {
     "buefy": "^0.6.6",
     "vue": "^2.5.17",
+    "vue-google-autocomplete": "^1.1.0",
     "vue-slideout": "^1.7.0",
     "vue-slideout-panel": "^3.0.0"
   },

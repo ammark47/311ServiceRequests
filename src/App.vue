@@ -1,11 +1,16 @@
 <template>
   <div id="app">
     <Slideout :touch="false" :toggleSelectors="['.toggle-button', '.another-toggle', '.not-a-toggle']" @on-open="logger">
+<<<<<<< HEAD
       <HelloWorld/>
 
     </Slideout>
     <CheckBox />
     <HelloWorld msg="Welcome to Your Vue.js App"/>
+=======
+      <HelloWorld msg="Welcome to Your Vue.js App"/>
+    </Slideout>
+>>>>>>> 993bb516dfcfd47deb392948ed052cded47c5208
   </div>
 </template>
 
@@ -25,11 +30,11 @@ export default {
     CheckBox
   },
   mounted: function() {
-    console.log(this.$children[0].slideout.isOpen());
+    
   },
   methods: {
     logger: function() {
-      console.log("open event");
+      
     }
   }
 }

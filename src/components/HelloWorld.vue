@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <nav id="menu">
-      <div>Menu</div>
+      <div class="logo">Menu</div>
     </nav>
 
     <main id="panel">
@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'hello',
   props: {
     msg: String
   }
@@ -30,6 +30,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.logo {
+  background-img: url("../assets/311_logo.png");
+}
 h3 {
   margin: 40px 0 0;
 }

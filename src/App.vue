@@ -1,21 +1,28 @@
 <template>
   <div id="app">
     <Slideout :touch="false" :toggleSelectors="['.toggle-button', '.another-toggle', '.not-a-toggle']" @on-open="logger">
-      <Hello/>
+      <HelloWorld/>
+
     </Slideout>
+    <CheckBox />
     <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import Slideout from "vue-slideout";
+import CheckBox from './components/CheckBox.vue'
+
+import Slideout from "vue-slideout"
+
+
 
 export default {
   name: 'app',
   components: {
     HelloWorld,
-    Slideout
+    Slideout,
+    CheckBox
   },
   mounted: function() {
     console.log(this.$children[0].slideout.isOpen());

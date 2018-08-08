@@ -1,4 +1,5 @@
 <template>
+  <div class="checkbox">
     <section>
         <div class="field">
             <b-checkbox>Basic</b-checkbox>
@@ -19,10 +20,12 @@
             <b-checkbox disabled>Disabled</b-checkbox>
         </div>
     </section>
+    </div>
 </template>
 
 <script>
     export default {
+        name: 'checkbox',
         data() {
             return {
                 checkbox: false,

@@ -3,8 +3,8 @@
     <nav id="menu">
 
       <div class="logo">Menu</div>
-      <div>Menu</div>
       <Search />
+      <CheckBox />
 
     </nav>
 
@@ -24,10 +24,11 @@
 
 <script>
 import Search from './Search'
+import CheckBox from './CheckBox'
 
 export default {
   name: 'helloworld',
-  components: { Search },
+  components: { Search, CheckBox },
   props: {
     msg: String
   }

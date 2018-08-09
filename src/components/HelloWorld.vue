@@ -12,7 +12,7 @@
 
     </label>
     </div>
-<button class="button is-primary" slot="trigger"  @click="addMarker">Click me!</button>
+<button class="button is-primary" slot="trigger"  @click="getLocalServiceRequests">Click me!</button>
 
       <p class="content">
           <b>Optional Filters</b>
@@ -97,15 +97,16 @@ export default {
     setPlace(place) {
       this.currentPlace = place;
     },
-    addMarker() {
+    getLocalServiceRequests() {
       if (this.currentPlace) {
         const marker = {
           lat: this.currentPlace.geometry.location.lat(),
           lng: this.currentPlace.geometry.location.lng()
         };
-        this.markers.push({ position: marker });
-        this.places.push(this.currentPlace);
+        // this.markers.push({ position: marker });
+        // this.places.push(this.currentPlace);
         this.center = marker;
+        console.log(this.center)
         this.currentPlace = null;
       }
     },

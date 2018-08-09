@@ -6,7 +6,7 @@
             classname="form-control"
             placeholder="Please type your address"
             v-on:placechanged="getAddressData"
-            country="sg"
+            country="us"
         >
         </vue-google-autocomplete>
 
@@ -42,7 +42,9 @@ export default {
       * @param {String} id Input container ID
       */
       getAddressData: function (addressData, placeResultData, id) {
-          this.address = addressData;
+          this.address = addressData
+          console.log("hello")
+          console.log(placeResultData)
       }
   }
 }

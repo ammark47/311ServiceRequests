@@ -3,8 +3,16 @@
     <nav id="menu">
 
       <div class="logo"></div>
-      <Search />
-      <button class="button is-primary" slot="trigger">Click me!</button>
+
+    <label>
+      <gmap-autocomplete
+        @place_changed="setPlace">
+      </gmap-autocomplete>
+
+    </label>
+<br/>
+<button class="button is-primary" slot="trigger"  @click="addMarker">Click me!</button>
+
       <p class="content">
           <b>Optional Filters</b>
       </p>
@@ -36,7 +44,6 @@
 
 
 
-
     </nav>
 
     <main id="panel">
@@ -45,7 +52,20 @@
         <div class="another-toggle"> <button>another</button></div>
         <div class="not-a-toggle"> <button>this one wont work</button></div>
         <img alt="Vue logo" src="../assets/logo.png">
+
       </header>
+      <gmap-map
+        :center="center"
+        :zoom="12"
+        style="width:100%;  height: 400px;"
+      >
+        <gmap-marker
+          :key="index"
+          v-for="(m, index) in markers"
+          :position="m.position"
+          @click="center=m.position"
+        ></gmap-marker>
+      </gmap-map>
 
 
     <h1>{{ msg }}</h1>
@@ -54,16 +74,52 @@
 </template>
 
 <script>
-import Search from './Search'
+
+import CheckBox from './CheckBox'
 
 export default {
   name: 'helloworld',
-  data: function(){
-            return {
-checkboxGroup: []
-            }
-            },
-  components: { Search },
+  components: { },
+  data() {
+    return {
+      // default to Montreal to keep it simple
+      // change this to whatever makes sense
+      center: { lat: 45.508, lng: -73.587 },
+      markers: [],
+      places: [],
+      currentPlace: null,
+      checkboxGroup: []
+    }
+  },
+  mounted() {
+    this.geolocate()
+  },
+  methods: {
+    // receives a place object via the autocomplete component
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+    addMarker() {
+      if (this.currentPlace) {
+        const marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        };
+        this.markers.push({ position: marker });
+        this.places.push(this.currentPlace);
+        this.center = marker;
+        this.currentPlace = null;
+      }
+    },
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
+    }
+  },
   props: {
     msg: String
   }

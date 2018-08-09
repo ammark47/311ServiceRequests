@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Slideout :touch="false" :toggleSelectors="['.toggle-button', '.another-toggle', '.not-a-toggle']" @on-open="logger">
+    <Slideout :touch="false" :toggleSelectors="['.toggle-button']" @on-open="logger">
       <HelloWorld/>
 
     </Slideout>
@@ -100,5 +100,8 @@ body {
   float: left;
   height: 36px;
   margin-right: 5px;
+}
+.gmnoprint {
+    display: none !important;
 }
 </style>

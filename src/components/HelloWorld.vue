@@ -4,13 +4,14 @@
 
       <div class="logo"></div>
 
+    <div class="searchBar">
     <label>
       <gmap-autocomplete
         @place_changed="setPlace">
       </gmap-autocomplete>
 
     </label>
-<br/>
+    </div>
 <button class="button is-primary" slot="trigger"  @click="addMarker">Click me!</button>
 
       <p class="content">
@@ -48,16 +49,13 @@
 
     <main id="panel">
       <header>
-        <div><button class="toggle-button">☰</button>Panel</div>
-        <div class="another-toggle"> <button>another</button></div>
-        <div class="not-a-toggle"> <button>this one wont work</button></div>
-        <img alt="Vue logo" src="../assets/logo.png">
+        <div><button class="toggle-button">☰</button></div>
 
       </header>
       <gmap-map
         :center="center"
         :zoom="12"
-        style="width:100%;  height: 400px;"
+        style="width:100%;  height: 100vh;"
       >
         <gmap-marker
           :key="index"
@@ -129,6 +127,28 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.gmnoprint {
+    display: none !important;
+}
+button.toggle-button {
+    background: #feee1f;
+    border: none;
+    float: left;
+    font-size: 24px;
+    color: black;
+    margin-left: 10px;
+    margin-top: 15px;
+    z-index: 9999;
+    position: absolute;
+    left: 5px;
+}
+button.toggle-button::focus {
+    outline: 0;
+}
+.searchBar input[type="text"] {
+    height: 35px;
+    width: 200px;
+}
 .button.is-primary {
     background-color: #feee1f;
     border-radius: 0;

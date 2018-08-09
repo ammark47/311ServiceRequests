@@ -19,7 +19,7 @@
       </p>
       <section>
       <b-checkbox-button v-model="checkboxGroup"
-        native-value="NYPD"
+        native-value="PIGS"
         type="is-danger">
         <span>New York Police Department</span>
       </b-checkbox-button>
@@ -31,8 +31,8 @@
       </b-checkbox-button>
 
       <b-checkbox-button v-model="checkboxGroup"
-        native-value="Default">
-        Default
+        native-value="Ghettos">
+        <span>"Ethnic Neighborhoods"</span>
       </b-checkbox-button>
 
 
@@ -142,7 +142,7 @@ button.toggle-button {
     position: absolute;
     left: 5px;
 }
-button.toggle-button::focus {
+button.toggle-button:focus {
     outline: 0;
 }
 .searchBar input[type="text"] {

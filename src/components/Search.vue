@@ -44,7 +44,7 @@ export default {
       getAddressData: function (addressData, placeResultData, id) {
           this.address = addressData
           console.log("hello")
-          console.log( this.$refs.address.value)
+          console.log(placeResultData)
       }
   }
 }

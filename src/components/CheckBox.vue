@@ -23,6 +23,21 @@
     </div>
 </template>
 
+<style scoped>
+.b-checkbox.checkbox {
+  outline: none;
+  display: -webkit-inline-box;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 10px;
+  text-transform: uppercase;
+  float: left;
+  height: 36px;
+  margin-right: 5px;
+}
+
+</style>
+
 <script>
     export default {
         name: 'checkbox',

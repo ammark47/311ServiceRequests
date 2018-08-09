@@ -12,7 +12,8 @@
     "vue": "^2.5.17",
     "vue-google-autocomplete": "^1.1.0",
     "vue-slideout": "^1.7.0",
-    "vue-slideout-panel": "^3.0.0"
+    "vue-slideout-panel": "^3.0.0",
+    "vue2-google-maps": "^0.10.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-rc.11",

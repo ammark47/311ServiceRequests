@@ -34,8 +34,10 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family:'Nunito', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -85,5 +87,18 @@ body {
 
 .slideout-open .slideout-menu {
   display: block;
+  padding-left:25px;
+  padding-right: 25px;
+}
+.b-checkbox.checkbox {
+  outline: none;
+  display: -webkit-inline-box;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 10px;
+  text-transform: uppercase;
+  float: left;
+  height: 36px;
+  margin-right: 5px;
 }
 </style>

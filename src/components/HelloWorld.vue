@@ -5,6 +5,36 @@
       <div class="logo"></div>
       <Search />
       <button class="button is-primary" slot="trigger">Click me!</button>
+      <p class="content">
+          <b>Optional Filters</b>
+      </p>
+      <section>
+      <b-checkbox-button v-model="checkboxGroup"
+        native-value="NYPD"
+        type="is-danger">
+        <span>New York Police Department</span>
+      </b-checkbox-button>
+
+      <b-checkbox-button v-model="checkboxGroup"
+        native-value="DSNY"
+        type="is-success">
+        <span>Department of Transportation</span>
+      </b-checkbox-button>
+
+      <b-checkbox-button v-model="checkboxGroup"
+        native-value="Default">
+        Default
+      </b-checkbox-button>
+
+
+      <p class="content">
+          <b>Selection:</b>
+          {{ checkboxGroup }}
+      </p>
+      </section>
+
+
+
 
 
     </nav>
@@ -25,11 +55,15 @@
 
 <script>
 import Search from './Search'
-import CheckBox from './CheckBox'
 
 export default {
   name: 'helloworld',
-  components: { Search, CheckBox },
+  data: function(){
+            return {
+checkboxGroup: []
+            }
+            },
+  components: { Search },
   props: {
     msg: String
   }
@@ -46,6 +80,7 @@ export default {
     margin-top: 5px;
     width: 200px;
     border: none;
+    margin-bottom: 20px;
 }
 h3 {
   margin: 40px 0 0;

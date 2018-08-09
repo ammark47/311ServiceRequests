@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Slideout :touch="false" :toggleSelectors="['.toggle-button']" @on-open="logger">
-      <HelloWorld/>
+      <GoogleMapSearch/>
 
     </Slideout>
 
@@ -9,24 +9,22 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import CheckBox from './components/CheckBox.vue'
-
+import GoogleMapSearch from './components/GoogleMapSearch.vue'
 import Slideout from "vue-slideout"
 
 
 export default {
   name: 'app',
   components: {
-    HelloWorld,
+    GoogleMapSearch,
     Slideout,
   },
   mounted: function() {
-    console.log(this.$children[0].slideout.isOpen());
+    
   },
   methods: {
     logger: function() {
-      console.log("open event");
+      
     }
   }
 }

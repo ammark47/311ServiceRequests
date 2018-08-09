@@ -1,5 +1,5 @@
   <template>
-    <div class="helloworld">
+    <div class="GoogleMapSearch">
       <nav id="menu">
 
         <div class="logo"></div>
@@ -61,6 +61,7 @@
             :key="index"
             v-for="(m, index) in markers"
             :position="m.position"
+            :clickable="true"
             @click="center=m.position"
           ></gmap-marker>
         </gmap-map>
@@ -75,7 +76,7 @@
   import axios from 'axios'
 
   export default {
-    name: 'helloworld',
+    name: 'googlemapsearch',
     components: { },
     data() {
       return {
@@ -103,8 +104,8 @@
             lng: this.currentPlace.geometry.location.lng()
           }
           // this.places.push(this.currentPlace);
-          this.center = marker;
-        
+          this.center = marker
+          this.markers = []
           this.getServiceRequest(this.center.lat, this.center.lng)
           this.currentPlace = null;
         }

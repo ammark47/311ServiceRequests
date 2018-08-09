@@ -10,7 +10,6 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import CheckBox from './components/CheckBox.vue'
 
 import Slideout from "vue-slideout"
 

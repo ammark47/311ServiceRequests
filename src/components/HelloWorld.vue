@@ -1,8 +1,12 @@
 <template>
   <div class="helloworld">
     <nav id="menu">
-      <div>Menu</div>
+
+      <div class="logo"></div>
       <Search />
+      <button class="button is-primary" slot="trigger">Click me!</button>
+
+
     </nav>
 
     <main id="panel">
@@ -21,10 +25,11 @@
 
 <script>
 import Search from './Search'
+import CheckBox from './CheckBox'
 
 export default {
   name: 'helloworld',
-  components: { Search },
+  components: { Search, CheckBox },
   props: {
     msg: String
   }
@@ -34,6 +39,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.button.is-primary {
+    background-color: #feee1f;
+    border-radius: 0;
+    color: black;
+    margin-top: 5px;
+    width: 200px;
+    border: none;
+}
 h3 {
   margin: 40px 0 0;
 }
@@ -47,5 +60,17 @@ li {
 }
 a {
   color: #42b983;
+}
+.logo{
+    background-image: url(../assets/311_logo.png);
+    width: 200px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-bottom: 1px #363636 solid;
+    padding-bottom: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 20px;
 }
 </style>

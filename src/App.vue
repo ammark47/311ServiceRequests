@@ -1,27 +1,32 @@
 <template>
   <div id="app">
     <Slideout :touch="false" :toggleSelectors="['.toggle-button', '.another-toggle', '.not-a-toggle']" @on-open="logger">
-      <HelloWorld msg="Welcome to Your Vue.js App"/>
+      <HelloWorld/>
+
     </Slideout>
+
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import Slideout from "vue-slideout";
+import CheckBox from './components/CheckBox.vue'
+
+import Slideout from "vue-slideout"
+
 
 export default {
   name: 'app',
   components: {
     HelloWorld,
-    Slideout
+    Slideout,
   },
   mounted: function() {
-    
+    console.log(this.$children[0].slideout.isOpen());
   },
   methods: {
     logger: function() {
-      
+      console.log("open event");
     }
   }
 }
@@ -48,7 +53,6 @@ body {
   bottom: 0;
   width: 256px;
   height: 100vh;
-  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   z-index: 0;
   display: none;

@@ -74,6 +74,7 @@
 
   <script>
   import axios from 'axios'
+  import { mapGetters, mapMutations, mapActions } from 'vuex'
 
   export default {
     name: 'googlemapsearch',
@@ -88,6 +89,11 @@
         currentPlace: null,
         checkboxGroup: []
       }
+    },
+    computed: {
+      ...mapGetters([
+        'getAddress'
+      ])
     },
     mounted() {
       this.geolocate()
@@ -135,7 +141,13 @@
             lng: position.coords.longitude
           };
         });
-      }
+      },
+      ...mapMutations([
+        'updateAddress'
+      ]),
+      ...mapActions([
+        'updateAddressValue'
+      ])
     },
     props: {
       msg: String

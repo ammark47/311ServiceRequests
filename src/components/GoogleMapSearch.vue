@@ -112,6 +112,8 @@
           // this.places.push(this.currentPlace);
           this.center = marker
           this.markers = []
+          // this.$store.dispatch('updateAddressValue', marker)
+          // console.log(this.$store.getters.getAddress.lat, this.$store.getters.getAddress.lng)
           this.getServiceRequest(this.center.lat, this.center.lng)
           this.currentPlace = null;
         }

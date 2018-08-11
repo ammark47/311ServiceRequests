@@ -14,7 +14,10 @@
             <b>Optional Filters</b>
         </p>
         <section>
-          <CustomFilter :filterGroup='filterGroup' @updateGroup='filterServiceRequests'/>
+          <b-collapse :open="false">
+            <button class="button is-primary" slot="trigger">Toggle Filter!</button>
+            <CustomFilter :filterGroup='filterGroup' @updateGroup='filterServiceRequests'/>
+          </b-collapse>
         </section>
       </nav>
       <main id="panel">
@@ -98,7 +101,7 @@
       filterServiceRequests(newfilterGroup) {
         const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
         const address = this.$store.getters.getAddress
-        var initServiceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=5000'
+        var initServiceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=20'
 
         //loop through filters and add new term to search api
         for (const key in newfilterGroup) {
@@ -107,11 +110,9 @@
             case 'agencyName':
               newfilterGroup[key].forEach((agency, index) =>{
                 if (index == 0) {
-                  console.log(agency, index)
-                  initServiceRequests += '&agency_name=' + agency
+                  initServiceRequests += '&agency=' + agency
                 } else {
-                  console.log(agency, index)
-                  initServiceRequests += '%20or%20agency_name=' + agency
+                  initServiceRequests += '%20or%20agency=' + agency
                 }
               })
               break

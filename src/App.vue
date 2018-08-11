@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Slideout :touch="false" :toggleSelectors="['.toggle-button']" @on-open="logger">
+    <Slideout :touch="false" :toggleSelectors="['.toggle-button','button.button.is-primary']" @on-open="logger">
 
       <GoogleMapSearch/>
 

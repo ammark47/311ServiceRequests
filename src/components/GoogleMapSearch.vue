@@ -52,8 +52,9 @@
           <div><button class="toggle-button">☰</button></div>
 
         </header>
-        <serviceRequest :infoContent="infoContent"/>
-
+        <transition name="fade">
+        <serviceRequest v-if="showSrBox" :infoContent="infoContent"  v-on:enlarge-text="sayHi"/>
+        </transition>
         <gmap-map
           :center="center"
           :zoom="12"
@@ -105,68 +106,79 @@
         currentPlace: null,
         checkboxGroup: [],
         infoPosition: null,
-    infoContent: {
-      status: null,
-      latitude: null,
-      longitude: null,
-      agency_name: null,
-      incident_address: null,
-      created_date: null,
-      closed_date: null,
-      due_date: null,
-      complaint_type: null,
-      description: null
-    },
-    infoOpened: false,
-    infoCurrentKey: null,
-    infoOptions: {
-      pixelOffset: {
-        width: 0,
-        height: -35
-      }
-    }
+        infoContent: {
+          status: null,
+          latitude: null,
+          longitude: null,
+          uniquekey: null,
+          agency_name: null,
+          incident_address: null,
+          created_date: null,
+          closed_date: null,
+          due_date: null,
+          complaint_type: null,
+          description: null,
+          resolution: null
+        },
+        infoOpened: false,
+        infoCurrentKey: null,
+        showSrBox: false,
+        infoOptions: {
+          pixelOffset: {
+            width: 0,
+            height: -35
+          }
+        }
       }
     },
     mounted() {
       this.geolocate();
     },
     methods: {
+      sayHi: function () {
+      this.showSrBox = false
+    },
       // receives a place object via the autocomplete component
       setPlace(place) {
         this.currentPlace = place;
       },
+      convertToDate(datestring) {
+        var st = datestring
+        return (st.substring(5,7) + "/" + st.substring(8,10) + "/" + st.substring(0,4))
+      },
       testfunction(marker, index) {
-        console.log(index);
-        console.log(this.markers[index]);
-        console.log("this is" + this.markers[index].position.uniquekey);
         this.infoPosition = {
           lat: this.markers[index].position.lat,
           lng: this.markers[index].position.lng
         }
         this.infoContent = {
           status: this.markers[index].position.status,
+          uniquekey: this.markers[index].position.uniquekey,
           latitude: this.markers[index].position.lat,
           longitude: this.markers[index].position.lng,
           agency_name: this.markers[index].position.agency_name,
           incident_address: this.markers[index].position.incident_address,
-          created_date: this.markers[index].position.created_date,
-          closed_date: this.markers[index].position.closed_date,
+          created_date: this.convertToDate(this.markers[index].position.created_date),
+          closed_date: this.convertToDate(this.markers[index].position.closed_date),
           due_date: this.markers[index].position.due_date,
           complaint_type: this.markers[index].position.complaint_type,
-          description: this.markers[index].position.descriptor
-
+          description: this.markers[index].position.descriptor,
+          resolution: this.markers[index].position.resolution
         }
-  console.log("current key" + this.infoCurrentKey);
+        console.log(this.infoContent.description)
+        if (this.infoContent.description == undefined) {
+          this.infoContent.description = "None available."
+        }
         if (this.infoCurrentKey == index) {
           this.infoOpened = !this.infoOpened;
+          this.showSrBox = !this.showSrBox;
         }
         else {
           this.infoOpened=true;
+          this.showSrBox=true;
           this.infoCurrentKey=index;
         }
-        this.markers.forEach(function(entry) {
-      console.log(entry);
-  });
+
       },
       getPosition: function(marker,index) {
           return {
@@ -213,9 +225,9 @@
             closed_date: serviceRequestObject.closed_date,
             due_date: serviceRequestObject.due_date,
             complaint_type: serviceRequestObject.complaint_type,
-            description: serviceRequestObject.descriptor
+            description: serviceRequestObject.descriptor,
+            resolution: serviceRequestObject.resolution_description
           }
-          console.log("Coordinates "+ marker.lat + " and " + marker.lng + "and" + marker.uniquekey);
           this.markers.push({position:marker})
         })
       },
@@ -230,6 +242,11 @@
     },
     props: {
       msg: String
+    },
+    events: {
+      'child-msg': function (msg) {
+        console.log(msg)
+      }
     }
   }
 

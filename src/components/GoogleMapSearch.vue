@@ -1,56 +1,25 @@
   <template>
     <div class="GoogleMapSearch">
       <nav id="menu">
-
         <div class="logo"></div>
-
       <div class="searchBar">
       <label>
         <gmap-autocomplete
           @place_changed="setPlace">
         </gmap-autocomplete>
-
       </label>
       </div>
   <button class="button is-primary" slot="trigger"  @click="getLatLngCoors">Click me!</button>
-
         <p class="content">
             <b>Optional Filters</b>
         </p>
         <section>
-        <b-checkbox-button v-model="checkboxGroup"
-          native-value="PIGS"
-          type="is-danger">
-          <span>New York Police Department</span>
-        </b-checkbox-button>
-
-        <b-checkbox-button v-model="checkboxGroup"
-          native-value="DSNY"
-          type="is-success">
-          <span>Department of Transportation</span>
-        </b-checkbox-button>
-
-        <b-checkbox-button v-model="checkboxGroup"
-          native-value="Ghettos">
-          <span>"Ethnic Neighborhoods"</span>
-        </b-checkbox-button>
-
-
-        <p class="content">
-            <b>Selection:</b>
-            {{ checkboxGroup }}
-        </p>
+          <CustomFilter :filterGroup='filterGroup' @updateGroup='filterServiceRequests'/>
         </section>
-
-
-
-
       </nav>
-
       <main id="panel">
         <header>
           <div><button class="toggle-button">☰</button></div>
-
         </header>
         <gmap-map
           :center="center"
@@ -66,7 +35,6 @@
           ></gmap-marker>
         </gmap-map>
 
-
       <h1>{{ msg }}</h1>
         </main>
     </div>
@@ -74,11 +42,12 @@
 
   <script>
   import axios from 'axios'
+  import CustomFilter from './CustomFilter'
   import { mapGetters, mapMutations, mapActions } from 'vuex'
 
   export default {
     name: 'googlemapsearch',
-    components: { },
+    components: { CustomFilter },
     data() {
       return {
         // default to Montreal to keep it simple
@@ -86,8 +55,8 @@
         center: { lat: 40.7675, lng: 73.8331 },
         markers: [],
         places: [],
-        currentPlace: null,
-        checkboxGroup: []
+        filterGroup: {},
+        currentPlace: null
       }
     },
     computed: {
@@ -112,19 +81,50 @@
           // this.places.push(this.currentPlace);
           this.center = marker
           this.markers = []
-          // this.$store.dispatch('updateAddressValue', marker)
+          this.$store.dispatch('updateAddressValue', marker)
           // console.log(this.$store.getters.getAddress.lat, this.$store.getters.getAddress.lng)
-          this.getServiceRequest(this.center.lat, this.center.lng)
+          this.getServiceRequest(this.$store.getters.getAddress)
           this.currentPlace = null;
         }
       },
-      getServiceRequest(lat,lng) {
+      getServiceRequest(address) {
         const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
-        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + lat + ',' + lng + ',500)&$limit=20'
+        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=20'
 
         axios
         .get(serviceRequests)
         .then((response) => (this.convertRequestsToMarkers(response.data)))
+      },
+      filterServiceRequests(newfilterGroup) {
+        const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
+        const address = this.$store.getters.getAddress
+        var initServiceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=5000'
+
+        //loop through filters and add new term to search api
+        for (const key in newfilterGroup) {
+          // initServiceRequests += '&'
+          switch (key) {
+            case 'agencyName':
+              newfilterGroup[key].forEach((agency, index) =>{
+                if (index == 0) {
+                  console.log(agency, index)
+                  initServiceRequests += '&agency_name=' + agency
+                } else {
+                  console.log(agency, index)
+                  initServiceRequests += '%20or%20agency_name=' + agency
+                }
+              })
+              break
+          }
+
+        axios
+        .get(initServiceRequests)
+        .then((response) => (this.convertRequestsToMarkers(response.data)))
+
+        }
+        console.log(initServiceRequests)
+        // console.log(this.$store.getters.getAddress)
+        // console.log(newfilterGroup.agencyName[0])
       },
       convertRequestsToMarkers(rqsts){
         var marker;
@@ -141,8 +141,11 @@
           this.center = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
-          };
-        });
+          }
+
+          this.$store.dispatch('updateAddressValue', this.center)
+          this.getServiceRequest(this.$store.getters.getAddress)
+        })
       },
       ...mapMutations([
         'updateAddress'

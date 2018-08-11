@@ -5,30 +5,30 @@
       <div class="columns">
         <div class="column  is-one-fifth">
           <h3>Status</h3>
-          <div class="status">{{ infoContent }}</div>
+          <div class="status">{{ infoContent.status }}</div>
         </div>
         <div class="column is-one-fifth">
           <h3> Date Created </h3>
-          <h4> 07/01/2018</h4>
+          <h4> {{ infoContent.created_date }}</h4>
           <h3> Date Closed </h3>
-          <h4> Pending</h4>
+          <h4> {{ infoContent.closed_date }}</h4>
         </div>
         <div class="column">
           <h3> Agency </h3>
-          <h4> 07/01/2018</h4>
+          <h4> {{ infoContent.agency_name }}</h4>
           <h3> Incident Address </h3>
-          <h4> 137-60 45th Ave Flushing, NY 11355 </h4>
+          <h4> {{ infoContent.incident_address }} </h4>
         </div>
       </div>
       <div class="columns">
           <div class="column is-one-fifth">
             <h3>Complaint Type</h3>
-            <h4> Noise</h4>
+            <h4> {{ infoContent.complaint_type }}</h4>
 
           </div>
           <div class="column is-two-thirds">
             <h3>Complaint Description</h3>
-            <h4> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </h4>
+            <h4> {{ infoContent.description }} </h4>
 
           </div>
       </div>

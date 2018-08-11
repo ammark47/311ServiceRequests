@@ -105,7 +105,18 @@
         currentPlace: null,
         checkboxGroup: [],
         infoPosition: null,
-    infoContent: null,
+    infoContent: {
+      status: null,
+      latitude: null,
+      longitude: null,
+      agency_name: null,
+      incident_address: null,
+      created_date: null,
+      closed_date: null,
+      due_date: null,
+      complaint_type: null,
+      description: null
+    },
     infoOpened: false,
     infoCurrentKey: null,
     infoOptions: {
@@ -132,8 +143,20 @@
           lat: this.markers[index].position.lat,
           lng: this.markers[index].position.lng
         }
-        this.infoContent = this.markers[index].position.status;
-        console.log("current key" + this.infoCurrentKey);
+        this.infoContent = {
+          status: this.markers[index].position.status,
+          latitude: this.markers[index].position.lat,
+          longitude: this.markers[index].position.lng,
+          agency_name: this.markers[index].position.agency_name,
+          incident_address: this.markers[index].position.incident_address,
+          created_date: this.markers[index].position.created_date,
+          closed_date: this.markers[index].position.closed_date,
+          due_date: this.markers[index].position.due_date,
+          complaint_type: this.markers[index].position.complaint_type,
+          description: this.markers[index].position.descriptor
+
+        }
+  console.log("current key" + this.infoCurrentKey);
         if (this.infoCurrentKey == index) {
           this.infoOpened = !this.infoOpened;
         }
@@ -149,7 +172,8 @@
           return {
           lat: parseFloat(marker[index].lat),
           lng: parseFloat(marker[index].lng),
-          status: parseFloat(marker[index].status)
+          status: parseFloat(marker[index].status),
+
         }
       },
       getLatLngCoors() {
@@ -179,10 +203,17 @@
         console.log(rqsts);
         rqsts.forEach(serviceRequestObject => {
           marker = {
+            uniquekey: parseFloat(serviceRequestObject.unique_key),
             lat: parseFloat(serviceRequestObject.latitude),
             lng: parseFloat(serviceRequestObject.longitude),
-            uniquekey: parseFloat(serviceRequestObject.unique_key),
-            status: serviceRequestObject.status
+            status: serviceRequestObject.status,
+            agency_name: serviceRequestObject.agency_name,
+            incident_address: serviceRequestObject.incident_address,
+            created_date: serviceRequestObject.created_date,
+            closed_date: serviceRequestObject.closed_date,
+            due_date: serviceRequestObject.due_date,
+            complaint_type: serviceRequestObject.complaint_type,
+            description: serviceRequestObject.descriptor
           }
           console.log("Coordinates "+ marker.lat + " and " + marker.lng + "and" + marker.uniquekey);
           this.markers.push({position:marker})

@@ -52,17 +52,29 @@
           <div><button class="toggle-button">☰</button></div>
 
         </header>
+        <serviceRequest :infoContent="infoContent"/>
+
         <gmap-map
           :center="center"
           :zoom="12"
           style="width:100%;  height: 100vh;"
+          map-type-id= "roadmap"
+          :options="mapOptions"
         >
+
+        <gmap-info-window :options="infoOptions" :position="infoPosition" :opened="infoOpened" @closeclick="infoOpened=false">
+        <div><p style="color:black">{{infoContent}}</p></div>
+      </gmap-info-window>
+
+
           <gmap-marker
             :key="index"
             v-for="(m, index) in markers"
             :position="m.position"
             :clickable="true"
-            @click="center=m.position"
+            :uniquekey="m.uniquekey"
+            :status = "m.status"
+            @click="testfunction(m,index)"
           ></gmap-marker>
         </gmap-map>
 
@@ -74,37 +86,81 @@
 
   <script>
   import axios from 'axios'
+  import serviceRequest from '../components/serviceRequest.vue'
+
 
   export default {
     name: 'googlemapsearch',
-    components: { },
+    components: { serviceRequest },
     data() {
       return {
         // default to Montreal to keep it simple
         // change this to whatever makes sense
         center: { lat: 45.508, lng: -73.587 },
+        mapOptions: {
+          mapTypeControl:false,
+        zoomControl: true},
         markers: [],
         places: [],
         currentPlace: null,
-        checkboxGroup: []
+        checkboxGroup: [],
+        infoPosition: null,
+    infoContent: null,
+    infoOpened: false,
+    infoCurrentKey: null,
+    infoOptions: {
+      pixelOffset: {
+        width: 0,
+        height: -35
+      }
+    }
       }
     },
     mounted() {
-      this.geolocate()
+      this.geolocate();
     },
     methods: {
       // receives a place object via the autocomplete component
       setPlace(place) {
         this.currentPlace = place;
       },
+      testfunction(marker, index) {
+        console.log(index);
+        console.log(this.markers[index]);
+        console.log("this is" + this.markers[index].position.uniquekey);
+        this.infoPosition = {
+          lat: this.markers[index].position.lat,
+          lng: this.markers[index].position.lng
+        }
+        this.infoContent = this.markers[index].position.status;
+        console.log("current key" + this.infoCurrentKey);
+        if (this.infoCurrentKey == index) {
+          this.infoOpened = !this.infoOpened;
+        }
+        else {
+          this.infoOpened=true;
+          this.infoCurrentKey=index;
+        }
+        this.markers.forEach(function(entry) {
+      console.log(entry);
+  });
+      },
+      getPosition: function(marker,index) {
+          return {
+          lat: parseFloat(marker[index].lat),
+          lng: parseFloat(marker[index].lng),
+          status: parseFloat(marker[index].status)
+        }
+      },
       getLatLngCoors() {
         if (this.currentPlace) {
           const marker = {
             lat: this.currentPlace.geometry.location.lat(),
             lng: this.currentPlace.geometry.location.lng()
-          }
-          // this.places.push(this.currentPlace);
-          this.center = marker
+          };
+          //this.markers.push({ position: marker });
+          //this.places.push(this.currentPlace);
+          this.center = marker;
           this.markers = []
           this.getServiceRequest(this.center.lat, this.center.lng)
           this.currentPlace = null;
@@ -112,7 +168,7 @@
       },
       getServiceRequest(lat,lng) {
         const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
-        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + lat + ',' + lng + ',500)&$limit=20'
+        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + lat + ',' + lng + ',500)&$limit=5'
 
         axios
         .get(serviceRequests)
@@ -120,11 +176,15 @@
       },
       convertRequestsToMarkers(rqsts){
         var marker;
+        console.log(rqsts);
         rqsts.forEach(serviceRequestObject => {
           marker = {
             lat: parseFloat(serviceRequestObject.latitude),
-            lng: parseFloat(serviceRequestObject.longitude)
+            lng: parseFloat(serviceRequestObject.longitude),
+            uniquekey: parseFloat(serviceRequestObject.unique_key),
+            status: serviceRequestObject.status
           }
+          console.log("Coordinates "+ marker.lat + " and " + marker.lng + "and" + marker.uniquekey);
           this.markers.push({position:marker})
         })
       },
@@ -146,9 +206,9 @@
 
   <!-- Add "scoped" attribute to limit CSS to this component only -->
   <style scoped>
-  .gmnoprint {
+  /*.gmnoprint {
       display: none !important;
-  }
+  } */
   button.toggle-button {
       background: #feee1f;
       border: none;

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Slideout :touch="false" :toggleSelectors="['.toggle-button']" @on-open="logger">
+
       <GoogleMapSearch/>
 
     </Slideout>
@@ -20,11 +21,11 @@ export default {
     Slideout,
   },
   mounted: function() {
-    
+
   },
   methods: {
     logger: function() {
-      
+
     }
   }
 }
@@ -99,7 +100,7 @@ body {
   height: 36px;
   margin-right: 5px;
 }
-.gmnoprint {
+/* .gmnoprint {
     display: none !important;
-}
+} */
 </style>

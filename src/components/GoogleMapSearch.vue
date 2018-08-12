@@ -52,17 +52,30 @@
           <div><button class="toggle-button">☰</button></div>
 
         </header>
+        <transition name="fade">
+        <serviceRequest v-if="showSrBox" :infoContent="infoContent"  v-on:enlarge-text="sayHi"/>
+        </transition>
         <gmap-map
           :center="center"
           :zoom="17"
           style="width:100%;  height: 100vh;"
+          map-type-id= "roadmap"
+          :options="mapOptions"
         >
+
+        <gmap-info-window :options="infoOptions" :position="infoPosition" :opened="infoOpened" @closeclick="infoOpened=false">
+        <div><p style="color:black">{{infoContent}}</p></div>
+      </gmap-info-window>
+
+
           <gmap-marker
             :key="index"
             v-for="(m, index) in markers"
             :position="m.position"
             :clickable="true"
-            @click="center=m.position"
+            :uniquekey="m.uniquekey"
+            :status = "m.status"
+            @click="testfunction(m,index)"
           ></gmap-marker>
         </gmap-map>
 
@@ -74,20 +87,50 @@
 
   <script>
   import axios from 'axios'
+
   import { mapGetters, mapMutations, mapActions } from 'vuex'
+  import serviceRequest from '../components/serviceRequest.vue'
+
 
   export default {
     name: 'googlemapsearch',
-    components: { },
+    components: { serviceRequest },
     data() {
       return {
         // default to Montreal to keep it simple
         // change this to whatever makes sense
-        center: { lat: 40.7675, lng: 73.8331 },
+        center: { lat: 45.508, lng: -73.587 },
+        mapOptions: {
+          mapTypeControl:false,
+        zoomControl: true},
         markers: [],
         places: [],
         currentPlace: null,
-        checkboxGroup: []
+        checkboxGroup: [],
+        infoPosition: null,
+        infoContent: {
+          status: null,
+          latitude: null,
+          longitude: null,
+          uniquekey: null,
+          agency_name: null,
+          incident_address: null,
+          created_date: null,
+          closed_date: null,
+          due_date: null,
+          complaint_type: null,
+          description: null,
+          resolution: null
+        },
+        infoOpened: false,
+        infoCurrentKey: null,
+        showSrBox: false,
+        infoOptions: {
+          pixelOffset: {
+            width: 0,
+            height: -35
+          }
+        }
       }
     },
     computed: {
@@ -96,21 +139,78 @@
       ])
     },
     mounted() {
-      this.geolocate()
+      this.geolocate();
     },
     methods: {
+      sayHi: function () {
+      this.showSrBox = false
+    },
       // receives a place object via the autocomplete component
       setPlace(place) {
         this.currentPlace = place;
+      },
+      convertToDate(datestring) {
+        var st = datestring
+        return (st.substring(5,7) + "/" + st.substring(8,10) + "/" + st.substring(0,4))
+      },
+      testfunction(marker, index) {
+        this.center = {
+          lat: this.markers[index].position.lat,
+          lng: this.markers[index].position.lng
+        }
+        this.infoPosition = {
+          lat: this.markers[index].position.lat,
+          lng: this.markers[index].position.lng
+        }
+        this.infoContent = {
+          status: this.markers[index].position.status,
+          uniquekey: this.markers[index].position.uniquekey,
+          latitude: this.markers[index].position.lat,
+          longitude: this.markers[index].position.lng,
+          agency_name: this.markers[index].position.agency_name,
+          incident_address: this.markers[index].position.incident_address,
+          created_date: this.convertToDate(this.markers[index].position.created_date),
+          closed_date: this.convertToDate(this.markers[index].position.closed_date),
+          due_date: this.markers[index].position.due_date,
+          complaint_type: this.markers[index].position.complaint_type,
+          description: this.markers[index].position.descriptor,
+          resolution: this.markers[index].position.resolution
+        }
+        console.log(this.infoContent.description)
+        if (this.infoContent.description == undefined) {
+          this.infoContent.description = "No description available."
+        }
+        if (this.infoContent.resolution == undefined) {
+          this.infoContent.description = "No description available."
+        }
+        if (this.infoCurrentKey == index) {
+          this.infoOpened = !this.infoOpened;
+          this.showSrBox = !this.showSrBox;
+        }
+        else {
+          this.infoOpened=true;
+          this.showSrBox=true;
+          this.infoCurrentKey=index;
+        }
+
+      },
+      getPosition: function(marker,index) {
+          return {
+          lat: parseFloat(marker[index].lat),
+          lng: parseFloat(marker[index].lng),
+          status: parseFloat(marker[index].status),
+
+        }
       },
       getLatLngCoors() {
         if (this.currentPlace) {
           const marker = {
             lat: this.currentPlace.geometry.location.lat(),
             lng: this.currentPlace.geometry.location.lng()
-          }
-          // this.places.push(this.currentPlace);
-          this.center = marker
+          };
+          //this.markers.push({ position: marker });
+          //this.places.push(this.currentPlace);
+          this.center = marker;
           this.markers = []
           // this.$store.dispatch('updateAddressValue', marker)
           // console.log(this.$store.getters.getAddress.lat, this.$store.getters.getAddress.lng)
@@ -120,7 +220,7 @@
       },
       getServiceRequest(lat,lng) {
         const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
-        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + lat + ',' + lng + ',500)&$limit=20'
+        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + lat + ',' + lng + ',500)&$limit=5'
 
         axios
         .get(serviceRequests)
@@ -128,10 +228,21 @@
       },
       convertRequestsToMarkers(rqsts){
         var marker;
+        console.log(rqsts);
         rqsts.forEach(serviceRequestObject => {
           marker = {
+            uniquekey: parseFloat(serviceRequestObject.unique_key),
             lat: parseFloat(serviceRequestObject.latitude),
-            lng: parseFloat(serviceRequestObject.longitude)
+            lng: parseFloat(serviceRequestObject.longitude),
+            status: serviceRequestObject.status,
+            agency_name: serviceRequestObject.agency_name,
+            incident_address: serviceRequestObject.incident_address,
+            created_date: serviceRequestObject.created_date,
+            closed_date: serviceRequestObject.closed_date,
+            due_date: serviceRequestObject.due_date,
+            complaint_type: serviceRequestObject.complaint_type,
+            description: serviceRequestObject.descriptor,
+            resolution: serviceRequestObject.resolution_description
           }
           this.markers.push({position:marker})
         })
@@ -153,6 +264,11 @@
     },
     props: {
       msg: String
+    },
+    events: {
+      'child-msg': function (msg) {
+        console.log(msg)
+      }
     }
   }
 
@@ -160,9 +276,9 @@
 
   <!-- Add "scoped" attribute to limit CSS to this component only -->
   <style scoped>
-  .gmnoprint {
+  /*.gmnoprint {
       display: none !important;
-  }
+  } */
   button.toggle-button {
       background: #feee1f;
       border: none;

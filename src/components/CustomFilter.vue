@@ -56,6 +56,26 @@
     
         </b-collapse>
 
+        <!-- Status filter -->
+        <b-collapse :open="false">
+            <button class="button is-primary" slot="trigger">Status Filter!</button>
+
+            <b-checkbox-button v-model="filterGroup.statusType"
+            native-value="Open">
+            <span>Open</span>
+            </b-checkbox-button>
+
+            <b-checkbox-button v-model="filterGroup.statusType"
+            native-value="Closed">
+            <span>Closed</span>
+            </b-checkbox-button>
+
+            <b-checkbox-button v-model="filterGroup.statusType"
+            native-value="Assigned">
+            <span>Assigned</span>
+            </b-checkbox-button>
+        </b-collapse>
+
             <!--start date filter -->
             <div>
                 <b-field label="Select a date">
@@ -80,8 +100,7 @@
                 </b-field>
             </div>
     </div>
-    
-    
+      
 </template>
 
 <script>
@@ -91,6 +110,7 @@ export default {
         return {
             filterGroup: {
                 agencyName: [],
+                statusType: [],
                 date: {
                     start: new Date(),
                     end: new Date()

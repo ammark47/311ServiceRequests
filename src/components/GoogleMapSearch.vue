@@ -91,7 +91,7 @@
       },
       getServiceRequest(address) {
         const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
-        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=20'
+        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=1000'
 
         axios
         .get(serviceRequests)
@@ -102,7 +102,7 @@
         const address = this.$store.getters.getAddress
         var initServiceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)'
 
-        console.log(newfilterGroup.startDate)
+        this.markers = []
 
         //loop through filters and add new term to search api
         for (const key in newfilterGroup) {
@@ -125,12 +125,24 @@
               endDate = endDate.substring(0, endDate.indexOf('.'))
 
               initServiceRequests += ' and created_date between %27' + startDate + '%27 and %27' + endDate + '%27'
+              break
+            case 'statusType':
+              newfilterGroup[key].forEach((status, index) =>{
+                if (index == 0) {
+                  initServiceRequests += '&status=' + status
+                } else {
+                  initServiceRequests += '%20or%20status=' + status 
+                }
+              })
+              break
           }
 
         }
 
         // limit responses
-        initServiceRequests += '&$limit=5000'
+        initServiceRequests += '&$limit=10000'
+
+        console.log(initServiceRequests)
 
         axios
         .get(initServiceRequests)
@@ -138,7 +150,8 @@
       
       },
       convertRequestsToMarkers(rqsts){
-        var marker;
+        console.log(rqsts)
+        var marker
         rqsts.forEach(serviceRequestObject => {
           marker = {
             lat: parseFloat(serviceRequestObject.latitude),

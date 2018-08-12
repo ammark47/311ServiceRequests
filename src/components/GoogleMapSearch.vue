@@ -69,7 +69,6 @@
 
 
           <gmap-marker
-          :icon="'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'"
             :key="index"
             v-for="(m, index) in markers"
             :position="m.position"

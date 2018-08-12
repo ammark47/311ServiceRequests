@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <Slideout :touch="false" :toggleSelectors="['.toggle-button','button.button.is-primary']" @on-open="logger">
-
+    <Slideout :touch="false" :toggleSelectors="['.toggle-button','.button.is-primary']" @on-open="logger">
       <GoogleMapSearch/>
 
     </Slideout>
@@ -70,7 +69,7 @@ body {
 }
 
 .slideout-panel {
-  background-color: lightgray;
+  background-color: #4b5;
   color: white;
   position: relative;
   z-index: 1;
@@ -100,7 +99,4 @@ body {
   height: 36px;
   margin-right: 5px;
 }
-/* .gmnoprint {
-    display: none !important;
-} */
 </style>

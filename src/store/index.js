@@ -1,14 +1,27 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
-import address from './address'
-import createLogger from '../../../src/plugins/logger'
+import Vuex from "vuex"
 
 Vue.use(Vuex)
 
-export default  new Vuex.Store({
-    modules: {
-        address
+export const store = new Vuex.Store({
+    state: {
+        address: {
+            lat: 0,
+            lng: 0
+        }
     },
-    strict: debug,
-    plugins: debug ? [createLogger()] : []
+    getters: {
+        getAddress: state => state.address
+    },
+    mutations: {
+        updateAddress(state, addressPayload) {
+            state.address.lat = addressPayload.lat
+            state.address.lng = addressPayload.lng
+        }
+    },
+    actions: {
+        updateAddressValue(context, address) {
+            context.commit('updateAddress', address)
+        }
+    }
 })

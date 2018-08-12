@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Buefy from 'buefy'
+import Vuex from 'vuex'
 import * as VueGoogleMaps from "vue2-google-maps";
+import {store} from './store/index.js'
 import 'buefy/lib/buefy.css'
 
 Vue.use(Buefy)
+Vue.use(Vuex)
 
 
 Vue.use(VueGoogleMaps, {
@@ -17,5 +20,6 @@ Vue.use(VueGoogleMaps, {
 Vue.config.productionTip = false
 
 new Vue({
+  store,
   render: h => h(App)
 }).$mount('#app')

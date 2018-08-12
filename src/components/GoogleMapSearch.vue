@@ -14,10 +14,9 @@
             <b>Optional Filters</b>
         </p>
         <section>
-          <b-collapse :open="false">
-            <button class="button is-primary" slot="trigger">Toggle Filter!</button>
+          
             <CustomFilter :filterGroup='filterGroup' @updateGroup='filterServiceRequests'/>
-          </b-collapse>
+          
         </section>
       </nav>
       <main id="panel">
@@ -101,7 +100,9 @@
       filterServiceRequests(newfilterGroup) {
         const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
         const address = this.$store.getters.getAddress
-        var initServiceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=20'
+        var initServiceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)'
+
+        console.log(newfilterGroup.startDate)
 
         //loop through filters and add new term to search api
         for (const key in newfilterGroup) {
@@ -116,16 +117,25 @@
                 }
               })
               break
+            case 'date':
+              // convert date to iso 8601 so api can use it
+              var startDate = newfilterGroup[key]['start'].toISOString()
+              startDate = startDate.substring(0, startDate.indexOf('.'))
+              var endDate = newfilterGroup[key]['end'].toISOString()
+              endDate = endDate.substring(0, endDate.indexOf('.'))
+
+              initServiceRequests += ' and created_date between %27' + startDate + '%27 and %27' + endDate + '%27'
           }
+
+        }
+
+        // limit responses
+        initServiceRequests += '&$limit=5000'
 
         axios
         .get(initServiceRequests)
         .then((response) => (this.convertRequestsToMarkers(response.data)))
-
-        }
-        console.log(initServiceRequests)
-        // console.log(this.$store.getters.getAddress)
-        // console.log(newfilterGroup.agencyName[0])
+      
       },
       convertRequestsToMarkers(rqsts){
         var marker;

@@ -1,5 +1,7 @@
 <template>
     <div class='customfilter'>
+        <b-collapse :open="false">
+            <button class="button is-primary" slot="trigger">Toggle Filter!</button>
             <b-checkbox-button v-model="filterGroup.agencyName"
             native-value="NYPD"
             type="is-danger">
@@ -51,9 +53,34 @@
             native-value="DEP">
             <span>Dep of Environ Protection</span>
             </b-checkbox-button>
+    
+        </b-collapse>
 
-        
+            <!--start date filter -->
+            <div>
+                <b-field label="Select a date">
+                    <b-datepicker
+                        placeholder="Type or select a date..."
+                        v-model="filterGroup.date.start"
+                        icon="calendar-today"
+                        :readonly="true">
+                    </b-datepicker>
+                </b-field>
+            </div>
+
+            <!--end date filter -->
+            <div>
+                <b-field label="Select a date">
+                    <b-datepicker
+                        placeholder="Type or select a date..."
+                        v-model="filterGroup.date.end"
+                        icon="calendar-today"
+                        :readonly="true">
+                    </b-datepicker>
+                </b-field>
+            </div>
     </div>
+    
     
 </template>
 
@@ -63,7 +90,11 @@ export default {
     data() {
         return {
             filterGroup: {
-                agencyName: []
+                agencyName: [],
+                date: {
+                    start: new Date(),
+                    end: new Date()
+                }
             }
         }
     },

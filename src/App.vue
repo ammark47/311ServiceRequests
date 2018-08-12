@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Slideout :touch="false" :toggleSelectors="['.toggle-button']" @on-open="logger">
+    <Slideout :touch="false" :toggleSelectors="['.toggle-button','.button.is-primary']" @on-open="logger">
       <GoogleMapSearch/>
 
     </Slideout>
@@ -9,7 +9,12 @@
 </template>
 
 <script>
+<<<<<<< HEAD
+import HelloWorld from './components/HelloWorld.vue'
+
+=======
 import GoogleMapSearch from './components/GoogleMapSearch.vue'
+>>>>>>> b3acc1005bc8033498b152ac37a7933d828bc478
 import Slideout from "vue-slideout"
 
 
@@ -20,11 +25,11 @@ export default {
     Slideout,
   },
   mounted: function() {
-    
+
   },
   methods: {
     logger: function() {
-      
+
     }
   }
 }
@@ -98,8 +103,5 @@ body {
   float: left;
   height: 36px;
   margin-right: 5px;
-}
-.gmnoprint {
-    display: none !important;
 }
 </style>

@@ -70,7 +70,7 @@ body {
 }
 
 .slideout-panel {
-  background-color: #4b5;
+  background-color: lightgray;
   color: white;
   position: relative;
   z-index: 1;

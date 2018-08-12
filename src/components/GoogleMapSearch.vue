@@ -57,7 +57,7 @@
         </transition>
         <gmap-map
           :center="center"
-          :zoom="12"
+          :zoom="17"
           style="width:100%;  height: 100vh;"
           map-type-id= "roadmap"
           :options="mapOptions"
@@ -69,6 +69,7 @@
 
 
           <gmap-marker
+          :icon="'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'"
             :key="index"
             v-for="(m, index) in markers"
             :position="m.position"
@@ -147,6 +148,10 @@
         return (st.substring(5,7) + "/" + st.substring(8,10) + "/" + st.substring(0,4))
       },
       testfunction(marker, index) {
+        this.center = {
+          lat: this.markers[index].position.lat,
+          lng: this.markers[index].position.lng
+        }
         this.infoPosition = {
           lat: this.markers[index].position.lat,
           lng: this.markers[index].position.lng
@@ -167,7 +172,10 @@
         }
         console.log(this.infoContent.description)
         if (this.infoContent.description == undefined) {
-          this.infoContent.description = "None available."
+          this.infoContent.description = "No description available."
+        }
+        if (this.infoContent.resolution == undefined) {
+          this.infoContent.description = "No description available."
         }
         if (this.infoCurrentKey == index) {
           this.infoOpened = !this.infoOpened;

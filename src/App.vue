@@ -9,12 +9,7 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-import HelloWorld from './components/HelloWorld.vue'
-
-=======
 import GoogleMapSearch from './components/GoogleMapSearch.vue'
->>>>>>> b3acc1005bc8033498b152ac37a7933d828bc478
 import Slideout from "vue-slideout"
 
 

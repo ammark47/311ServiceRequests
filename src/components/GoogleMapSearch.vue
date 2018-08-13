@@ -193,7 +193,7 @@
       },
       getServiceRequest(address) {
         const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
-        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=10000'
+        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=100'
 
         axios
         .get(serviceRequests)
@@ -253,7 +253,7 @@
         }
 
         // limit responses
-        initServiceRequests += '&$limit=10000'
+        initServiceRequests += '&$limit=100'
 
         console.log(initServiceRequests)
 

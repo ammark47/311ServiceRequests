@@ -53,7 +53,7 @@
             native-value="DEP">
             <span>Dep of Environ Protection</span>
             </b-checkbox-button>
-    
+
         </b-collapse> -->
 
         <!-- Status filter -->
@@ -78,7 +78,7 @@
 
             <!--start date filter -->
             <div>
-                <b-field label="Select a date">
+                <b-field label="Service requests between">
                     <b-datepicker
                         placeholder="Type or select a date..."
                         v-model="filterGroup.date.start"
@@ -87,10 +87,9 @@
                     </b-datepicker>
                 </b-field>
             </div>
-
             <!--end date filter -->
             <div>
-                <b-field label="Select a date">
+                <b-field label="and:">
                     <b-datepicker
                         placeholder="Type or select a date..."
                         v-model="filterGroup.date.end"
@@ -100,19 +99,22 @@
                 </b-field>
             </div>
     </div>
-      
+
 </template>
 
 <script>
 export default {
     name: 'customfilter',
     data() {
+        var start = new Date()
+        start = start.setDate(start.getDate() - 1)
+        console.log(start)
         return {
             filterGroup: {
                 agencyName: [],
                 statusType: [],
                 date: {
-                    start: new Date(),
+                    start: new Date(start),
                     end: new Date()
                 }
             }
@@ -136,7 +138,13 @@ export default {
 </script>
 
 <style scoped>
-
+.label {
+  margin-top: 10px !important;
+}
+.datepicker .datepicker-table .datepicker-body .datepicker-row .datepicker-cell.is-selected {
+  background-color:#feee1f;
+}
+.datepicker .datepicker-table .datepicker-body .datepicker-row .datepicker-cell.is-today {
+  border: 1px solid #feee1f;
+}
 </style>
-
-

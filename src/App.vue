@@ -33,6 +33,10 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Nunito');
+.label {
+  color: #feee1f !important;
+  margin-top: 10px !important;
+}
 
 #app {
   font-family:'Nunito', sans-serif;
@@ -54,7 +58,7 @@ body {
   width: 256px;
   height: 100vh;
   -webkit-overflow-scrolling: touch;
-  z-index: 0;
+  z-index: 2;
   display: none;
   background-color: #1d1f20;
   color: white;
@@ -69,7 +73,7 @@ body {
 }
 
 .slideout-panel {
-  background-color: #4b5;
+  background-color: rgb(229, 227, 223);
   color: white;
   position: relative;
   z-index: 1;

@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "buefy": "^0.6.6",
+    "soda-js": "^0.2.3",
     "vue": "^2.5.17",
     "vue-google-autocomplete": "^1.1.0",
     "vue-resource": "^1.5.1",

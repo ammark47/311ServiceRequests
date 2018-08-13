@@ -58,6 +58,7 @@
   <script>
   import axios from 'axios'
   import CustomFilter from './CustomFilter'
+  import soda from 'soda-js'
 
   import { mapGetters, mapMutations, mapActions } from 'vuex'
   import serviceRequest from '../components/serviceRequest.vue'
@@ -205,6 +206,16 @@
 
         this.markers = []
 
+        var consumer = new soda.Consumer('data.cityofnewyork.us')
+
+        consumer.query()
+          .withDataset('fhrw-4uyv')
+          .limit(5)
+          .where({ agency: 'NYPD' })
+          .getRows()
+          .on('success', (response) => (console.log(response)))
+          .on('error', function(error) { console.error(error) })
+
         //loop through filters and add new term to search api
         for (const key in newfilterGroup) {
           // initServiceRequests += '&'
@@ -245,13 +256,13 @@
 
         console.log(initServiceRequests)
 
-        axios
-        .get(initServiceRequests)
-        .then((response) => (this.convertRequestsToMarkers(response.data)))
+        // axios
+        // .get(initServiceRequests)
+        // .then((response) => (this.convertRequestsToMarkers(response.data)))
       
       },
       convertRequestsToMarkers(rqsts){
-        console.log(rqsts)
+        // console.log(rqsts)
         var marker
         rqsts.forEach(serviceRequestObject => {
           marker = {

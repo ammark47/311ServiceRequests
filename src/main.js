@@ -9,6 +9,9 @@ import 'buefy/lib/buefy.css'
 Vue.use(Buefy)
 Vue.use(Vuex)
 
+Vue.http.headers.common['Access-Control-Allow-Origin'] = true
+
+
 
 Vue.use(VueGoogleMaps, {
   load: {

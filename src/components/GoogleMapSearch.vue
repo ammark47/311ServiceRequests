@@ -1,9 +1,7 @@
   <template>
     <div class="GoogleMapSearch">
       <nav id="menu">
-
         <div class="logo"></div>
-
       <div class="searchBar">
         <b-field label="Please enter an address:"></b-field>
       <label>
@@ -20,39 +18,14 @@
             <b>Optional Filters</b>
         </p>
         <section>
-        <b-checkbox-button v-model="checkboxGroup"
-          native-value="PIGS"
-          type="is-danger">
-          <span>New York Police Department</span>
-        </b-checkbox-button>
 
-        <b-checkbox-button v-model="checkboxGroup"
-          native-value="DSNY"
-          type="is-success">
-          <span>Department of Transportation</span>
-        </b-checkbox-button>
+            <CustomFilter :filterGroup='filterGroup' @updateGroup='filterServiceRequests'/>
 
-        <b-checkbox-button v-model="checkboxGroup"
-          native-value="Ghettos">
-          <span>"Ethnic Neighborhoods"</span>
-        </b-checkbox-button>
-
-
-        <p class="content">
-            <b>Selection:</b>
-            {{ checkboxGroup }}
-        </p>
         </section>
-
-
-
-
       </nav>
-
       <main id="panel">
         <header>
           <div><button class="toggle-button">☰</button></div>
-
         </header>
         <transition name="fade">
         <serviceRequest v-if="showSrBox" :infoContent="infoContent"  v-on:enlarge-text="sayHi"/>
@@ -81,7 +54,6 @@
           ></gmap-marker>
         </gmap-map>
 
-
       <h1>{{ msg }}</h1>
         </main>
     </div>
@@ -89,6 +61,8 @@
 
   <script>
   import axios from 'axios'
+  import CustomFilter from './CustomFilter'
+  import soda from 'soda-js'
 
   import { mapGetters, mapMutations, mapActions } from 'vuex'
   import serviceRequest from '../components/serviceRequest.vue'
@@ -96,7 +70,7 @@
 
   export default {
     name: 'googlemapsearch',
-    components: { serviceRequest },
+    components: { CustomFilter, serviceRequest },
     data() {
       return {
         // default to Montreal to keep it simple
@@ -107,6 +81,7 @@
         zoomControl: true},
         markers: [],
         places: [],
+        filterGroup: {},
         currentPlace: null,
         checkboxGroup: [],
         infoPosition: null,
@@ -218,9 +193,9 @@
           //this.places.push(this.currentPlace);
           this.center = marker;
           this.markers = []
-          // this.$store.dispatch('updateAddressValue', marker)
+          this.$store.dispatch('updateAddressValue', marker)
           // console.log(this.$store.getters.getAddress.lat, this.$store.getters.getAddress.lng)
-          this.getServiceRequest(this.center.lat, this.center.lng)
+          this.getServiceRequest(this.$store.getters.getAddress)
           this.currentPlace = null;
         }
       },
@@ -241,9 +216,72 @@
         .get(serviceRequests)
         .then((response) => (this.convertRequestsToMarkers(response.data)))
       },
+      filterServiceRequests(newfilterGroup) {
+        const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
+        const address = this.$store.getters.getAddress
+        var initServiceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)'
+
+        this.markers = []
+
+        var consumer = new soda.Consumer('data.cityofnewyork.us')
+
+        // consumer.query()
+        //   .withDataset('fhrw-4uyv')
+        //   .limit(5)
+        //   .where({ agency: 'NYPD' })
+        //   .getRows()
+        //   .on('success', (response) => (console.log(response)))
+        //   .on('error', function(error) { console.error(error) })
+
+        //loop through filters and add new term to search api
+        for (const key in newfilterGroup) {
+          // initServiceRequests += '&'
+          switch (key) {
+            // case 'agencyName':
+            //   newfilterGroup[key].forEach((agency, index) =>{
+            //     if (index == 0) {
+            //       initServiceRequests += encodeURI('&agency=') + '%27' + encodeURI(agency) + '%27'
+            //     } else {
+            //       initServiceRequests += '%20or%20agency=%27' + agency + '%27'
+            //     }
+            //   })
+            //   break
+            case 'date':
+              // convert date to iso 8601 so api can use it
+              var startDate = newfilterGroup[key]['start'].toISOString()
+              startDate = startDate.substring(0, startDate.indexOf('.'))
+              var endDate = newfilterGroup[key]['end'].toISOString()
+              endDate = endDate.substring(0, endDate.indexOf('.'))
+
+              initServiceRequests += encodeURI(' and created_date between') + '%27' + encodeURI(startDate) + '%27' + encodeURI(' and ')
+                                  + '%27' + encodeURI(endDate) + '%27'
+              break
+            // case 'statusType':
+            //   newfilterGroup[key].forEach((status, index) =>{
+            //     if (index == 0) {
+            //       initServiceRequests += encodeURI('&status=' + status)
+            //     } else {
+            //       initServiceRequests += '%20' + encodeURI('or') + '%20' + encodeURI('status' + status)
+            //     }
+            //   })
+            //   break
+          }
+
+        }
+
+        // limit responses
+        initServiceRequests += '&$limit=100'
+
+        console.log(initServiceRequests)
+
+        axios
+        .get(initServiceRequests)
+        .then((response) => (this.convertRequestsToMarkers(response.data)))
+
+      },
       convertRequestsToMarkers(rqsts){
-        var marker;
-        console.log(rqsts);
+        // console.log(rqsts)
+        var marker
         rqsts.forEach(serviceRequestObject => {
           marker = {
             uniquekey: parseFloat(serviceRequestObject.unique_key),
@@ -267,8 +305,11 @@
           this.center = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
-          };
-        });
+          }
+
+          this.$store.dispatch('updateAddressValue', this.center)
+          this.getServiceRequest(this.$store.getters.getAddress)
+        })
       },
       ...mapMutations([
         'updateAddress'

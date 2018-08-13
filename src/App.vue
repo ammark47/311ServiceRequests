@@ -33,6 +33,9 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Nunito');
+.label {
+  color: #feee1f !important;
+}
 
 #app {
   font-family:'Nunito', sans-serif;

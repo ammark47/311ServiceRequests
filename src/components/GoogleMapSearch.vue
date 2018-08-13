@@ -14,9 +14,9 @@
       </div>
   <button class="button is-primary" slot="trigger"  @click="getLatLngCoors">SEARCH</button>
 
-        <p class="content">
+        <!-- <p class="content">
             <b>Optional Filters</b>
-        </p>
+        </p> -->
         <section>
 
             <CustomFilter :filterGroup='filterGroup' @updateGroup='filterServiceRequests'/>
@@ -199,7 +199,7 @@
           this.currentPlace = null;
         }
       },
-      getServiceRequest(lat,lng) {
+      getServiceRequest(address) {
         var today = new Date()
         var oldDate = new Date()
         var daysPrior = 0
@@ -209,8 +209,9 @@
         console.log(today,oldDate)
 
         const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
-        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + lat + ',' + lng + ',500)' + encodeURI(' AND status!=') + '%27Closed%27' + encodeURI(' OR closed_date between') + '%27' + encodeURI(oldDate) + '%27' + encodeURI(' and ') + '%27' + encodeURI(today) + '%27'
-        + '&$limit=50'
+        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',100)'
+        // + encodeURI(' AND status!=') + '%27Closed%27' + encodeURI(' OR closed_date between') + '%27' + encodeURI(oldDate) + '%27' + encodeURI(' and ') + '%27' + encodeURI(today) + '%27'
+
 
         axios
         .get(serviceRequests)
@@ -351,6 +352,7 @@
       position: absolute;
       left: 5px;
   }
+
   button.toggle-button:focus {
       outline: 0;
   }
@@ -369,6 +371,10 @@
       height:35px;
       font-weight:bold;
       font-size:12px;
+  }
+  .button.is-primary:hover {
+    background-color: #1d1f20;
+    border:1px solid #feee1f; 
   }
   h3 {
     margin: 40px 0 0;

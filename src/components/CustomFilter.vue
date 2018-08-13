@@ -1,6 +1,6 @@
 <template>
     <div class='customfilter'>
-        <b-collapse :open="false">
+        <!-- <b-collapse :open="false">
             <button class="button is-primary" slot="trigger">Toggle Filter!</button>
             <b-checkbox-button v-model="filterGroup.agencyName"
             native-value="NYPD"
@@ -54,10 +54,10 @@
             <span>Dep of Environ Protection</span>
             </b-checkbox-button>
     
-        </b-collapse>
+        </b-collapse> -->
 
         <!-- Status filter -->
-        <b-collapse :open="false">
+        <!-- <b-collapse :open="false">
             <button class="button is-primary" slot="trigger">Status Filter!</button>
 
             <b-checkbox-button v-model="filterGroup.statusType"
@@ -74,7 +74,7 @@
             native-value="Assigned">
             <span>Assigned</span>
             </b-checkbox-button>
-        </b-collapse>
+        </b-collapse> -->
 
             <!--start date filter -->
             <div>

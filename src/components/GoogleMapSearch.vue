@@ -193,7 +193,7 @@
       },
       getServiceRequest(address) {
         const apiEndpoint = 'https://data.cityofnewyork.us/resource/fhrw-4uyv.json?'
-        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=1000'
+        const serviceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)&$limit=10000'
 
         axios
         .get(serviceRequests)
@@ -208,27 +208,27 @@
 
         var consumer = new soda.Consumer('data.cityofnewyork.us')
 
-        consumer.query()
-          .withDataset('fhrw-4uyv')
-          .limit(5)
-          .where({ agency: 'NYPD' })
-          .getRows()
-          .on('success', (response) => (console.log(response)))
-          .on('error', function(error) { console.error(error) })
+        // consumer.query()
+        //   .withDataset('fhrw-4uyv')
+        //   .limit(5)
+        //   .where({ agency: 'NYPD' })
+        //   .getRows()
+        //   .on('success', (response) => (console.log(response)))
+        //   .on('error', function(error) { console.error(error) })
 
         //loop through filters and add new term to search api
         for (const key in newfilterGroup) {
           // initServiceRequests += '&'
           switch (key) {
-            case 'agencyName':
-              newfilterGroup[key].forEach((agency, index) =>{
-                if (index == 0) {
-                  initServiceRequests += '&agency=' + agency
-                } else {
-                  initServiceRequests += '%20or%20agency=' + agency
-                }
-              })
-              break
+            // case 'agencyName':
+            //   newfilterGroup[key].forEach((agency, index) =>{
+            //     if (index == 0) {
+            //       initServiceRequests += encodeURI('&agency=') + '%27' + encodeURI(agency) + '%27'
+            //     } else {
+            //       initServiceRequests += '%20or%20agency=%27' + agency + '%27'
+            //     }
+            //   })
+            //   break
             case 'date':
               // convert date to iso 8601 so api can use it
               var startDate = newfilterGroup[key]['start'].toISOString()
@@ -236,17 +236,18 @@
               var endDate = newfilterGroup[key]['end'].toISOString()
               endDate = endDate.substring(0, endDate.indexOf('.'))
 
-              initServiceRequests += ' and created_date between %27' + startDate + '%27 and %27' + endDate + '%27'
+              initServiceRequests += encodeURI(' and created_date between') + '%27' + encodeURI(startDate) + '%27' + encodeURI(' and ') 
+                                  + '%27' + encodeURI(endDate) + '%27'
               break
-            case 'statusType':
-              newfilterGroup[key].forEach((status, index) =>{
-                if (index == 0) {
-                  initServiceRequests += '&status=' + status
-                } else {
-                  initServiceRequests += '%20or%20status=' + status 
-                }
-              })
-              break
+            // case 'statusType':
+            //   newfilterGroup[key].forEach((status, index) =>{
+            //     if (index == 0) {
+            //       initServiceRequests += encodeURI('&status=' + status)
+            //     } else {
+            //       initServiceRequests += '%20' + encodeURI('or') + '%20' + encodeURI('status' + status)
+            //     }
+            //   })
+            //   break
           }
 
         }
@@ -256,9 +257,9 @@
 
         console.log(initServiceRequests)
 
-        // axios
-        // .get(initServiceRequests)
-        // .then((response) => (this.convertRequestsToMarkers(response.data)))
+        axios
+        .get(initServiceRequests)
+        .then((response) => (this.convertRequestsToMarkers(response.data)))
       
       },
       convertRequestsToMarkers(rqsts){

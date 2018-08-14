@@ -11,6 +11,9 @@
             </label>
           </div>
           <button class="button is-primary" slot="trigger"  @click="getLatLngCoors">SEARCH</button>
+          <button class="button is-primary is-medium" @click="openLoading">
+                Launch loading
+            </button>
 
         <!-- <p class="content">
             <b>Optional Filters</b>
@@ -28,6 +31,9 @@
           <serviceRequest v-if="showSrBox" :infoContent="infoContent"  v-on:enlarge-text="sayHi"/>
         </transition>
 
+         <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading> 
+
+
         <gmap-map
           :center="center"
           :zoom="17"
@@ -35,7 +41,7 @@
           map-type-id= "roadmap"
           :options="mapOptions"
         >
-
+         
           <gmap-marker
             :key="index"
             v-for="(m, index) in markers"
@@ -74,6 +80,8 @@
         currentPlace: null,
         checkboxGroup: [],
         infoPosition: null,
+        isLoading: false,
+        isFullPage: false,
         infoContent: {
           status: null,
           latitude: null,
@@ -108,9 +116,15 @@
       this.geolocate();
     },
     methods: {
-      sayHi: function () {
-      this.showSrBox = false
-    },
+      sayHi () {
+        this.showSrBox = false
+      },
+      openLoading() {
+          this.isLoading = true
+          setTimeout(() => {
+              this.isLoading = false
+          }, 10 * 1000)
+      },
       // receives a place object via the autocomplete component
       setPlace(place) {
         this.currentPlace = place;

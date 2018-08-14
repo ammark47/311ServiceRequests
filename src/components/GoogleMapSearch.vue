@@ -10,7 +10,7 @@
               </gmap-autocomplete>
             </label>
           </div>
-          <button class="button is-primary" slot="trigger"  @click="getLatLngCoors">SEARCH</button>
+          <button class="button is-primary searchButton" slot="trigger"  @click="getLatLngCoors">SEARCH</button>
 
         <!-- <p class="content">
             <b>Optional Filters</b>

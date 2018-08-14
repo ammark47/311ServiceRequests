@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <Slideout :touch="false" :toggleSelectors="['.toggle-button','.button.is-primary']" @on-open="logger">
+    <Modal/>
+
+    <Slideout :touch="false" :toggleSelectors="['.toggle-button','.searchButton']" @on-open="logger">
       <GoogleMapSearch/>
 
     </Slideout>
@@ -11,11 +13,14 @@
 <script>
 import GoogleMapSearch from './components/GoogleMapSearch.vue'
 import Slideout from "vue-slideout"
+import Modal from './components/Modal.vue'
+
 
 
 export default {
   name: 'app',
   components: {
+    Modal,
     GoogleMapSearch,
     Slideout,
   },
@@ -24,7 +29,6 @@ export default {
   },
   methods: {
     logger: function() {
-
     }
   }
 }

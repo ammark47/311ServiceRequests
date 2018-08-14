@@ -6,6 +6,8 @@ import * as VueGoogleMaps from "vue2-google-maps"
 import VueResource from 'vue-resource'
 import {store} from './store/index.js'
 import 'buefy/lib/buefy.css'
+import VueCookieAcceptDecline from 'vue-cookie-accept-decline'
+Vue.component('vue-cookie-accept-decline', VueCookieAcceptDecline)
 
 Vue.use(Buefy)
 Vue.use(Vuex)

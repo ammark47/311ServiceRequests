@@ -38,9 +38,9 @@
           :options="mapOptions"
         >
 
-        <gmap-info-window :options="infoOptions" :position="infoPosition" :opened="infoOpened" @closeclick="infoOpened=false">
+        <!-- <gmap-info-window :options="infoOptions" :position="infoPosition" :opened="infoOpened" @closeclick="infoOpened=false">
         <div><p style="color:black">{{infoContent}}</p></div>
-      </gmap-info-window>
+      </gmap-info-window> -->
 
 
           <gmap-marker
@@ -374,7 +374,7 @@
   }
   .button.is-primary:hover {
     background-color: #1d1f20;
-    border:1px solid #feee1f; 
+    border:1px solid #feee1f;
   }
   h3 {
     margin: 40px 0 0;

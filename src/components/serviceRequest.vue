@@ -49,7 +49,6 @@
           <div class="column">
             <h3>Resolution Description</h3>
             <h4> {{ infoContent.resolution }}</h4>
-
           </div>
       </div>
   </div>

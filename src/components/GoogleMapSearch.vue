@@ -2,34 +2,32 @@
     <div class="GoogleMapSearch">
       <nav id="menu">
         <div class="logo"></div>
-      <div class="searchBar">
-        <b-field label="Please enter an address:"></b-field>
-      <label>
-
-          <gmap-autocomplete
-            @place_changed="setPlace">
-          </gmap-autocomplete>
-
-      </label>
-      </div>
-  <button class="button is-primary" slot="trigger"  @click="getLatLngCoors">SEARCH</button>
+        <div class="searchBar">
+          <b-field label="Please enter an address:"></b-field>
+            <label>
+              <gmap-autocomplete
+                @place_changed="setPlace">
+              </gmap-autocomplete>
+            </label>
+          </div>
+          <button class="button is-primary" slot="trigger"  @click="getLatLngCoors">SEARCH</button>
 
         <!-- <p class="content">
             <b>Optional Filters</b>
         </p> -->
         <section>
-
-            <CustomFilter :filterGroup='filterGroup' @updateGroup='filterServiceRequests'/>
-
+          <CustomFilter :filterGroup='filterGroup' @updateGroup='filterServiceRequests'/>
         </section>
       </nav>
+
       <main id="panel">
         <header>
           <div><button class="toggle-button">☰</button></div>
         </header>
         <transition name="fade">
-        <serviceRequest v-if="showSrBox" :infoContent="infoContent"  v-on:enlarge-text="sayHi"/>
+          <serviceRequest v-if="showSrBox" :infoContent="infoContent"  v-on:enlarge-text="sayHi"/>
         </transition>
+
         <gmap-map
           :center="center"
           :zoom="17"
@@ -37,11 +35,6 @@
           map-type-id= "roadmap"
           :options="mapOptions"
         >
-
-        <!-- <gmap-info-window :options="infoOptions" :position="infoPosition" :opened="infoOpened" @closeclick="infoOpened=false">
-        <div><p style="color:black">{{infoContent}}</p></div>
-      </gmap-info-window> -->
-
 
           <gmap-marker
             :key="index"
@@ -54,8 +47,8 @@
           ></gmap-marker>
         </gmap-map>
 
-      <h1>{{ msg }}</h1>
-        </main>
+
+      </main>
     </div>
   </template>
 
@@ -63,18 +56,14 @@
   import axios from 'axios'
   import CustomFilter from './CustomFilter'
   import soda from 'soda-js'
-
   import { mapGetters, mapMutations, mapActions } from 'vuex'
   import serviceRequest from '../components/serviceRequest.vue'
-
 
   export default {
     name: 'googlemapsearch',
     components: { CustomFilter, serviceRequest },
     data() {
       return {
-        // default to Montreal to keep it simple
-        // change this to whatever makes sense
         center: { lat: 45.508, lng: -73.587 },
         mapOptions: {
           mapTypeControl:false,

@@ -28,7 +28,7 @@
           <serviceRequest v-if="showSrBox" :infoContent="infoContent"  v-on:enlarge-text="sayHi"/>
         </transition>
 
-         <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading> 
+         <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
 
 
         <gmap-map
@@ -38,7 +38,7 @@
           map-type-id= "roadmap"
           :options="mapOptions"
         >
-         
+
           <gmap-marker
             :key="index"
             v-for="(m, index) in markers"
@@ -179,6 +179,8 @@
         }
       },
       getLatLngCoors() {
+        //open loading symbol while api call is running
+        this.isLoading = true
         if (this.currentPlace) {
           const marker = {
             lat: this.currentPlace.geometry.location.lat(),

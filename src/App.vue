@@ -2,7 +2,7 @@
   <div id="app">
     <Modal/>
 
-    <Slideout :touch="false" :toggleSelectors="['.toggle-button','#searchbutton']" @on-open="logger">
+    <Slideout :touch="false" :toggleSelectors="['.toggle-button','.searchButton']" @on-open="logger">
       <GoogleMapSearch/>
 
     </Slideout>

@@ -11,9 +11,6 @@
             </label>
           </div>
           <button class="button is-primary" slot="trigger"  @click="getLatLngCoors">SEARCH</button>
-          <button class="button is-primary is-medium" @click="openLoading">
-                Launch loading
-            </button>
 
         <!-- <p class="content">
             <b>Optional Filters</b>
@@ -114,16 +111,11 @@
     },
     mounted() {
       this.geolocate();
+      this.isLoading = true
     },
     methods: {
       sayHi () {
         this.showSrBox = false
-      },
-      openLoading() {
-          this.isLoading = true
-          setTimeout(() => {
-              this.isLoading = false
-          }, 10 * 1000)
       },
       // receives a place object via the autocomplete component
       setPlace(place) {
@@ -225,6 +217,8 @@
         const address = this.$store.getters.getAddress
         var initServiceRequests = apiEndpoint + '$where=within_circle(location,' + address.lat + ',' + address.lng + ',500)'
 
+        //open loading symbol while api call is running
+        this.isLoading = true
         this.markers = []
 
         var consumer = new soda.Consumer('data.cityofnewyork.us')
@@ -303,6 +297,8 @@
           }
           this.markers.push({position:marker})
         })
+        // close loading symbol
+        this.isLoading = false
       },
       geolocate: function() {
         navigator.geolocation.getCurrentPosition(position => {

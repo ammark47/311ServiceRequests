@@ -60,6 +60,7 @@
   import CustomFilter from './CustomFilter'
   import soda from 'soda-js'
   import { mapGetters, mapMutations, mapActions } from 'vuex'
+  import VueResource from 'vue-resource'
   import serviceRequest from '../components/serviceRequest.vue'
 
   export default {
@@ -221,7 +222,24 @@
         this.isLoading = true
         this.markers = []
 
-        var consumer = new soda.Consumer('data.cityofnewyork.us')
+        var sodaOpts = {
+          username: "ammark1111@gmail.com",
+          password: "Password123",
+          apiTokens: 'ienAngYS3gLsjAleYuljmdi9N'
+        }
+
+        var consumer = new soda.Consumer('data.cityofnewyork.us', sodaOpts)
+
+
+        // this.$http.post('/test', (res) => {
+        //   console.log(res)
+        // }, res => {
+        //   console.log('error')
+        // })
+        console.log('yerds')
+
+        axios.post('api/test').then((res) => {console.log(res)
+        console.log('hello')})
 
         // consumer.query()
         //   .withDataset('fhrw-4uyv')
@@ -271,6 +289,7 @@
         initServiceRequests += '&$limit=100'
 
         console.log(initServiceRequests)
+
 
         axios
         .get(initServiceRequests)
